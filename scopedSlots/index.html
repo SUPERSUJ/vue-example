@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			Vue.component('btn', {
+				methods: {
+					alert: function() {
+						alert('click');
+					},
+				},
+				render: function(h) {
+					return this.$scopedSlots.default({
+						alert: this.alert,
+					});
+				},
+			});
+			new Vue({
+				el: '#demo',
+				template: `<btn>
+					<button slot-scope="{ alert }" @click="alert">click</button>
+				</btn>`,
+			});
+		</script>
+	</body>
+</html>

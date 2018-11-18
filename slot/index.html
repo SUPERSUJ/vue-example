@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		table {
+		  border-collapse: collapse;
+		  width: 100%;
+		  table-layout: fixed;
+		}
+		td {
+		  border: 1px solid #ccc;
+		  padding: 6px 10px;
+		}
+		table td:nth-child(odd) {
+		  width: 13%;
+		  text-align: right;
+		  background-color: #eee;
+		}
+		table td:nth-child(even) {
+		  width: 20.33%;
+		  background-color: #fff;
+		}
+		</style>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			Vue.component('tableCheck', {
+				render: function(h) {
+					console.log(this.$slots);
+					console.log(this.$slots.default);
+					return h('div', null, 'table');
+				},
+			});
+			
+			new Vue({
+				el: '#demo',
+				template: `<table-check>
+					a
+					b
+					c
+					<span slot="foo">foo</span>
+				</table-check>`,
+			});
+		</script>
+	</body>
+</html>
