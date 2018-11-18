@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+
+		<script type="text/javascript">
+			var Comp = Vue.extend({
+				props: ['msg'],
+				template: '<div>{{msg}}</div>',
+				methods: {
+					getMsg: function() {
+						console.log(this.msg);
+					},
+				},
+			});
+			var vm = new Comp({
+				propsData: {
+					msg: 'hello',
+				},
+			});
+			vm.getMsg();
+		</script>
+	</body>
+</html>

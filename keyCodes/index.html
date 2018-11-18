@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo">
+			<form>
+				First name:<br>
+				<input type="text" name="firstname" value="" @keyup.up="up" autofocus>
+				<br> Last name:<br>
+				<input type="text" name="lastname" value="" @keyup.up="up">
+			</form>
+		</div>
+		<script type="text/javascript">
+			Vue.config.keyCodes = {
+				up: [38, 87]
+			};
+			new Vue({
+				el: '#demo',
+				methods: {
+					up: function(e) {
+						let elem = e.path[0];
+						let ipts = Array.from(document.querySelectorAll('input'));
+						let idx = ipts.indexOf(elem);
+						let nextIdx = idx === 0 ? ipts.length - 1 : idx - 1;
+						ipts[nextIdx].focus();
+					},
+				},
+			});
+		</script>
+	</body>
+</html>

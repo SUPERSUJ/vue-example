@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo">
+			<p>{{obj}}</p>
+			<button @click="change">直接修改obj</button>
+			<button @click="changeObj">间接修改obj</button>
+		</div>
+		<script type="text/javascript">
+			new Vue({
+				el: '#demo',
+				data: function() {
+					return {
+						obj: {
+							a: 1,
+						}
+					};
+				},
+				watch: {
+					obj: {
+						handler: function(newVal, oldVal) {
+							console.log(newVal);
+							console.log(oldVal);
+						},
+						deep: true,
+					},
+				},
+				methods: {
+					change: function() {
+						this.obj.b = 2;
+					},
+					changeObj: function() {
+						Vue.set(this.obj, 'b', 3);
+					},
+				},
+			});
+		</script>
+	</body>
+</html>

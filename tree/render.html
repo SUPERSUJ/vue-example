@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			let item = Vue.component('item', {
+				props: {
+					model: Object,
+				},
+				data: function() {
+					return {
+						open: false,
+					};
+				},
+				computed: {
+					isFolder: function() {
+						return this.model.children && this.model.children.length;
+					},
+				},
+				methods: {
+					addChild: function() {
+						this.model.children.push({
+							name: 'new fold'
+						});
+					},
+					toggle: function() {
+						this.open = !this.open;
+					},
+					changeType: function() {
+						if (!this.isFolder) {
+							Vue.set(this.model, 'children', []);
+							this.addChild();
+							this.open = true;
+						}
+					},
+				},
+				render: function(h) {
+					let children = [];
+					let divChildren = [this.model.name];
+					let ul = null;
+					if (this.isFolder) {
+						divChildren.push(h('span', this.open ? '-' : '+'));
+					}
+					if (this.isFolder) {
+						let ulChildren = this.model.children.map(function(a) {
+							return h(item, {
+								props: {
+									model: a,
+								},
+							});
+						});
+						ul = h(
+							'ul',
+							{
+								style: {
+									display: this.open ? 'block' : 'none',
+								},
+							},
+							ulChildren
+						);
+					}
+					
+					return h('li', [
+						h(
+							'div',
+							{
+								on: {
+									click: this.toggle,
+									dblclick: this.changeType,
+								},
+							},
+							divChildren,
+						),
+						ul,
+					]);
+				},
+			});
+			new Vue({
+				el: '#demo',
+				data: function() {
+					return {
+						treeData: {
+							name: 'My Tree',
+							children: [{
+								name: '1',
+								children: [{
+									name: '1-1',
+									children: [{
+										name: '1-1-1'
+									}, {
+										name: '1-2'
+									}]
+								}],
+							}, {
+								name: '2'
+							}],
+						},
+					};
+				},
+				template: `<ul>
+										<item :model="treeData"></item>
+									</ul>`,
+			});
+		</script>
+	</body>
+</html>

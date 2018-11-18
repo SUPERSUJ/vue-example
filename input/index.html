@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/lodash.js/4.17.11/lodash.min.js"></script>
+	</head>
+	<body>
+		<div id="editor">
+		  <textarea :value="txt" @input="update"></textarea>
+		  <p>{{txt | type}}</p>
+		</div>
+		<script type="text/javascript">
+			Vue.filter('type', function(value) {
+				return Object.prototype.toString.call(value).slice(-8, -1).toLowerCase();
+			});
+			
+			new Vue({
+			  el: '#editor',
+			  data: {
+			    txt: 1,
+			  },
+			  created: function() {
+			  	var getType = Vue.filter('type');
+			  	console.log(getType({}));
+			  },
+			  methods: {
+			    update: _.debounce(function (e) {
+			    	console.log('e: ', e);
+			      this.txt = e.target.value;
+			    }, 300)
+			  }
+			});
+		</script>
+	</body>
+</html>
