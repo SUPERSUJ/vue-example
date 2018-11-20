@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const MyCheckbox = {
+				template: '<input type="checkbox" v-model="model" v-on="$listeners"></input>',
+				props: {
+					value: false,
+				},
+				computed: {
+					model: {
+						get: function() {
+							return this.value;
+						},
+						set: function(val) {
+							this.$emit('input', val)
+						},
+					},
+				},
+			};
+			
+			new Vue({
+				el: '#demo',
+				components: {
+					MyCheckbox,
+				},
+				data: {
+					check: false,
+				},
+				methods: {
+					change: function(...args) {
+						console.log('args: ', args);
+						console.log('check: ', this.check);
+					},
+				},
+				template: `
+					<div>
+						<my-checkbox v-model="check" @change="change">
+					</div>
+				`,
+			});
+		</script>
+	</body>
+</html>

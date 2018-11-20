@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+		const vm = new Vue({
+      template: `
+        <div v-once>
+          <span>{{ a }}</span>
+          <item :b="a"></item>
+        </div>`,
+      data: { a: 'hello' },
+      components: {
+        item: {
+          template: '<div>{{ b }}</div>',
+          props: ['b']
+        }
+      }
+    }).$mount()
+    console.log('vm: ', vm);
+    console.log('vm.$el.innerHtml: ', vm.$el.innerHTML);
+		</script>
+	</body>
+</html>

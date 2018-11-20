@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			var demo = document.getElementById('demo');
+			new Vue({
+	      data: {
+	        file: ''
+	      },
+	      watch: {
+	      	file: function(val, oldVal) {
+	      		console.log('val: ', val); // 文件绝对路径
+	      		console.log('oldVal: ', oldVal);
+	      	},
+	      },
+	      template: '<input v-model="file" type="file">'
+    	}).$mount(demo);
+		</script>
+	</body>
+</html>
