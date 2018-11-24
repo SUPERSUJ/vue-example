@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			var vm = new Vue({
+				data: function() {
+					return {
+						a: 1,
+					};
+				},
+				watch: {
+					a: function(newVal) {
+						console.log('newVal: ', newVal);
+					},
+				},
+				render: function(h) {
+					return h('div', [h('h3', this.a)]);
+				},
+				beforeMount: function() {
+					console.log(this._isMounted);
+					console.log(this.$el);
+					console.log(this._vnode);
+					console.log(this._watcher);
+				},
+				mounted: function() {
+					console.log(this);
+					console.log('_watcher', this._watcher);
+				},
+			});
+			console.log('vm: ', vm);
+			vm.$mount(document.querySelector('#demo'));
+		</script>
+	</body>
+</html>

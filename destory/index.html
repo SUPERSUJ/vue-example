@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			Vue.component('test', {
+				data: function() {
+					return {
+						a: 1,
+					};
+				},
+				created: function() {
+					this.$once('hook:mounted', function() {
+						console.log('a: ', this.a);
+					});
+				},
+				template: `<div>test</div>`,
+			});
+			new Vue({
+				el: '#demo',
+				template: `<test></test>`,
+			});
+		</script>
+	</body>
+</html>
