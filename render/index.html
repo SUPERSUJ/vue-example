@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<div id="demo"></div>
+		</div>
+		<script type="text/javascript">
+			Vue.component('child', {
+        props: ['value'],
+				render: function(h) {
+          var self = this;
+          return h('input', {
+            domProps: {
+              value: self.value,
+            },
+            on: {
+              input: function(event) {
+                self.value = event.target.value;
+                self.$emit('input', self.value);
+              },
+            },
+          })
+        },
+			});
+			new Vue({
+				el: '#demo',
+        data: {
+          value: '',
+        },
+				template: `
+          <div>
+            <child v-model="value"></child>{{value}}
+          </div>`,
+			});
+		</script>
+	</body>
+</html>
