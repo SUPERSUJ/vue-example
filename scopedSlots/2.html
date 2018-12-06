@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			new Vue({
+				template: `
+        <test ref="test">
+          <template slot-scope="props">
+            <span>{{ props.msg }} {{ props.msg2 }} {{ props.msg3 }}</span>
+          </template>
+        </test>
+      `,
+				components: {
+					test: {
+						data() {
+							return {
+								msg: 'hello',
+								obj: {
+									msg2: 'world',
+									msg3: '.'
+								}
+							}
+						},
+						template: `
+            <div>
+              <slot :msg="msg" v-bind="obj" msg3="!"></slot>
+            </div>
+          `
+					}
+				}
+			}).$mount('#demo');
+			
+//			v-bind="obj" 不错写法
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const CompB = {
+				functional: true,
+				render(h, {
+					slots
+				}) {
+					return slots().foo
+				}
+			}
+
+			const CompA = {
+				functional: true,
+				render(h, {
+					children
+				}) {
+					return h(CompB, children)
+				}
+			}
+
+			const vm = new Vue({
+				components: {
+					CompA
+				},
+				template: `
+        <div>
+          <comp-a>
+            <span slot="foo">foo</span>
+          </comp-a>
+        </div>
+      `
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			//			const vm = new Vue({
+			//				render(h) {
+			//					return h('test', {
+			//						ref: 'test',
+			//						scopedSlots: {
+			//							item: props => h('span', props.text)
+			//						}
+			//					})
+			//				},
+			//				components: {
+			//					test: {
+			//						data() {
+			//							return {
+			//								msg: 'hello'
+			//							}
+			//						},
+			//						render(h) {
+			//							return h('div', [
+			//								this.$scopedSlots.item({
+			//									text: this.msg
+			//								})
+			//							])
+			//						}
+			//					}
+			//				}
+			//			}).$mount('#demo')
+
+			const vm = new Vue({
+				render(h) {
+					return h('test', [
+						props => h('span', [props.msg]) // 还可以这么写
+					])
+				},
+				components: {
+					test: {
+						data() {
+							return {
+								msg: 'hello'
+							}
+						},
+						render(h) {
+							return h('div', [
+								this.$scopedSlots.default({
+									msg: this.msg
+								})
+							])
+						}
+					}
+				}
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

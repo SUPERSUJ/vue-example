@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const child = {
+				template: `
+        <div>
+          <div class="default"><slot></slot></div>
+          <div class="named"><slot name="foo"></slot></div>
+        </div>
+      `
+			}
+
+			var vm = new Vue({
+				template: `<test><span slot="foo">foo</span></test>`,
+				components: {
+					test: {
+						functional: true,
+						render(h, ctx) {
+							const slots = ctx.slots();
+							console.log('slots: ', slots);
+							return h(child, slots.foo);
+						},
+					},
+				},
+				el: '#demo',
+			});
+		</script>
+	</body>
+
+</html>

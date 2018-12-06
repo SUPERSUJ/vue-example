@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const ComponentWithSlots = {
+				render(h) {
+					return h('div', this.$slots.slot1)
+				}
+			}
+
+			const FunctionalComp = {
+				functional: true,
+				render(h) {
+					return h(ComponentWithSlots, [h('span', {
+						slot: 'slot1'
+					}, 'foo')])
+				}
+			}
+
+			const vm = new Vue({
+				el: '#demo',
+				data: {
+					n: 1
+				},
+				render(h) {
+					return h('div', [this.n, h(FunctionalComp)])
+				}
+			})
+		</script>
+	</body>
+
+</html>

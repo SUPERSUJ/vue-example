@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			var components = {
+				one: {
+					template: '<div>one</div>',
+					created: function() {
+						console.log('one created')
+					},
+					mounted: function() {
+						console.log('one mounted')
+					},
+					activated: function() {
+						console.log('one activated')
+					},
+					deactivated: function() {
+						console.log('one deactivated')
+					},
+					destroyed: function() {
+						console.log('one destroyed')
+					}
+				},
+				two: {
+					template: '<div>two</div>',
+					created: function() {
+						console.log('two created')
+					},
+					mounted: function() {
+						console.log('two mounted')
+					},
+					activated: function() {
+						console.log('two activated')
+					},
+					deactivated: function() {
+						console.log('two deactivated')
+					},
+					destroyed: function() {
+						console.log('two destroyed')
+					}
+				}
+			}
+
+			new Vue({
+				el: '#demo',
+				template: `
+					<div v-if="ok">
+						<keep-alive>
+							<component :is="view"></component>
+						</keep-alive>
+						<button @click="change">change</button>
+						<button @click="destroy">destroy</button>
+					</div>
+					`,
+				data() {
+					return {
+						view: 'one',
+						ok: true,
+						i: 0,
+					};
+				},
+				methods: {
+					change() {
+						this.i++;
+						this.view = this.i === 1 ? 'two' : 'one';
+					},
+					destroy() {
+						this.ok = false;
+					},
+				},
+				components,
+			});
+		</script>
+	</body>
+
+</html>

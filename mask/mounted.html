@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.mask {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: green;
+				opacity: 0.1;
+			}
+		</style>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			var maskCom = new Vue({
+				data: function() {
+					return {
+						isOpen: false,
+					};
+				},
+				methods: {
+					show: function() {
+						this.isOpen = true;
+					},
+					hide: function() {
+						this.isOpen = false;
+					},
+				},
+				mounted: function() {
+					document.body.appendChild(this.$el);
+				},
+				beforeDestory: function() {
+					console.log('beforeDestory');
+				},
+				template: `
+					<div class="mask" v-show="isOpen">
+					</div>
+				`,
+			});
+			maskCom.$mount();
+			console.log('maskCom: ', maskCom);
+			
+			new Vue({
+				el: '#demo',
+				methods: {
+					show: function() {
+						maskCom.show();
+					},
+					hide: function() {
+						maskCom.hide();
+					},
+				},
+				template: `
+					<div style="z-index: 1; position: relative;">
+						<button @click="show">show</button>
+						<button @click="hide">hide</button>
+					</div>
+				`,
+			});
+		</script>
+	</body>
+
+</html>

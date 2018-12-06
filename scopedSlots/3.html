@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			//			new Vue({
+			//				template: `
+			//      <test ref="test">
+			//        <template slot="item" slot-scope="props">
+			//          <span>{{ props.foo }}</span><span>{{ props.bar }}</span>
+			//        </template>
+			//      </test>
+			//    `,
+			//				components: {
+			//					test: {
+			//						data() {
+			//							return {
+			//								foo: 'FOO',
+			//								bar: 'BAR'
+			//							}
+			//						},
+			//						template: `
+			//          <div>
+			//            <slot name="item" :foo="foo" :bar="bar"></slot>
+			//          </div>
+			//        `
+			//					}
+			//				}
+			//			}).$mount('#demo')
+
+			const vm = new Vue({
+				template: `
+	        <test ref="test">
+	          <span slot="item" slot-scope="props">{{ props.foo }} {{ props.bar }}</span>
+	        </test>
+	      `,
+				components: {
+					test: {
+						data() {
+							return {
+								foo: 'FOO',
+								bar: 'BAR'
+							}
+						},
+						template: `
+            <div>
+              <slot name="item" :foo="foo" :bar="bar"></slot>
+            </div>
+          `
+					}
+				}
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			Vue.component('parent', {
+				data: function() {
+					return {
+						obj: {
+              name: 's',
+            },
+					};
+				},
+				provide: function() {
+					return {
+						a: this.obj,
+					};
+				},
+        methods: {
+          changeName: function() {
+            this.obj.name = 'u';
+          },
+        },
+				template: '<div><button @click="changeName">changeName</button><slot></slot></div>',
+			});
+			Vue.component('child', {
+				template: '<div>child<slot></slot></div>',
+			});
+			Vue.component('child2', {
+				inject: ['a'],
+				template: '<h3>{{a.name}}</h3>',
+			});
+			new Vue({
+				el: '#demo',
+				template: `
+					<parent>
+						<child>
+							<child2></child2>
+						</child>
+					</parent>
+				`,
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+		new Vue({
+			el: '#demo',
+			template: `<test><p slot="a">A</p><div>C</div><p slot="b">B</p></test>`,
+			components: {
+				test: {
+					render(h) {
+						console.log(this.$slots.a);
+						console.log(this.$slots.a[0].tag);
+						console.log(this.$slots.a[0].children);
+						console.log(this.$slots.a[0].children.length);
+						console.log(this.$slots.a[0].children[0].text);
+						console.log('============ default ==========');
+						console.log(this.$slots.default);
+						console.log(this.$slots.default[0]);
+						console.log(h('div', null, ['div'])); // 实质就是vnode
+//						return this.$slots.default[0]; // 实质就是vnode
+						return h('div', null, [...this.$slots.default, ...this.$slots.a, ...this.$slots.b]); // 实质就是vnode
+					},
+				},
+			},
+		});
+		</script>
+	</body>
+</html>

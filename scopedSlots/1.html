@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+				template: `
+	        <test ref="test">
+	          <span slot-scope="props">{{ props.msg }}</span>
+	        </test>
+	      `,
+				components: {
+					test: {
+						data() {
+							return {
+								msg: 'hello'
+							}
+						},
+						template: `
+            <div>
+              <slot :msg="msg"></slot>
+            </div>
+          `
+					}
+				}
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

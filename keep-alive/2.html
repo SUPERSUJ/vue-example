@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+		const foo = {
+			template: `<div>foo</div>`,
+		};
+		const bar = {
+			template: `<div>bar</div>`,
+		};
+		const child = {
+			functional: true,
+			render(h, ctx) {
+				return h(ctx.props.view ? foo : bar);
+			}
+		};
+		new Vue({
+			el: '#demo',
+			template: `
+			<div>
+				<keep-alive>
+					<child :view="view"></child>
+				</keep-alive>
+				<button @click="change">change</button>
+			</div>
+			`,
+			data: {
+				view: true,
+			},
+			methods: {
+				change() {
+					this.view = !this.view;
+				},
+			},
+			components: {
+				child,
+			},
+		});
+		</script>
+	</body>
+</html>

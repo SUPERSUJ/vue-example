@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+				template: `<test :foo-bar.sync="bar"/>`,
+				data: {
+					bar: 1,
+				},
+				components: {
+					test: {
+						props: ['fooBar'],
+						data: function() {
+							return {
+								obj: {
+				          id: 'test',
+				          class: 'ok',
+				          value: 'hello'
+				       	},
+							};
+						},
+						template: `<div @click="$emit('update:fooBar', 2)">{{ fooBar }}
+						<input v-bind="obj">
+						</div>`
+					}
+				}
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

@@ -15,6 +15,7 @@
 					},
 				},
 				render: function(h) {
+					console.log(this.$scopedSlots);
 					return this.$scopedSlots.default({
 						alert: this.alert,
 					});
