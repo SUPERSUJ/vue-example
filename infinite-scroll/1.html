@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+</head>
+
+<body>
+  <div class="app"
+     style="height: 1200px;background-color: #ccc;width: 400px;margin: 0 auto;"
+     v-infinite-scroll="loadMore"
+     infinite-scroll-disabled="busy"
+     infinite-scroll-distance="10">
+</div>
+  <script type="text/javascript">
+    const ctx = '@@InfiniteScroll';
+    const throttle = function(fn, delay) {
+      var now, lastExec, timer, context, args;
+      var execute = function() {
+        fn.apply(context, args);
+        lastExec = now;
+      }
+
+      return function() {
+        context = this;
+        args = arguments;
+        now = Date.now();
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+        if (lastExec) {
+          var diff = delay - (now - lastExec);
+          if (diff < 0) {
+            execute();
+          } else {
+            timer = setTimeout(() => {
+              execute();
+            }, diff);
+          }
+        } else {
+          execute();
+        }
+      }
+    };
+
+    var getScrollTop = function(element) {
+      // var doc = document.documentElement;
+      // var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+      // var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+      if (element === window) { // clientTop 是就是border-top的宽度
+        return Math.max(window.pageXOffset || 0, document.documentElement.scrollTop);
+      }
+      return element.scrollTop;
+    }
+
+    var getComputedStyle = document.defaultView.getComputedStyle;
+
+    var getScrollEventTarget = function(element) {
+      var currentNode = element;
+      while(currentNode && currentNode.tagName !== 'HTML' && currentNode.tagName !== 'BODY' && currentNode.nodeType === 1) {
+        var overflowY = getComputedStyle(currentNode).overflowY;
+        if (overflowY === 'scroll' || overflowY === 'auto') {
+          return currentNode;
+        }
+        currentNode = currentNode.parentNode;
+      }
+      return window;
+    }
+
+    var getVisibleHeight = function(element) {
+      if (element === window) {
+        return document.documentElement.clientHeight;
+      }
+      return element.clientHeight;
+    }
+
+    // 距离页面顶部的距离
+    var getElementTop = function(element) {
+      if (element === window) {
+        return getScrollTop(window);
+      }
+      return element.getBoundingClientRect().top + getScrollTop(window);
+    }
+
+    // 是否已经挂载
+    var isAttached = function(element) {
+      var currentNode = element.parentNode;
+      while(currentNode) {
+        if (currentNode.tagName === 'HTML') {
+          return true;
+        }
+        if (currentNode.nodeType === 11) { // docuemnt.createDocumentFragment()
+          return false;
+        }
+        currentNode = currentNode.parentNode;
+      }
+      return false;
+    }
+
+    var doBind = function() {
+      if (this.binded) return;
+      this.binded = true;
+      var directive = this;
+      var element = directive.el;
+
+      var throttleDelayExpr = element.getAttribute('infinite-scroll-throttle-delay');
+      var throttleDelay = 200;
+      if (throttleDelayExpr) {
+        throttleDelay = Number(directive.vm[throttleDelayExpr] || throttleDelay);
+        if (isNaN(throttle) || throttle < 0) {
+          throttleDelay = 200;
+        }
+      }
+      directive.throttleDelay = throttleDelay;
+      directive.scrollEventTarget = getScrollEventTarget(element);
+      directive.scrollListener = throttle(doCheck.bind(directive), directive.throttleDelay);
+      directive.scrollEventTarget.addEventListener('scroll', directive.scrollListener);
+      this.vm.$on('hook:beforeDestroy', function() {
+        directive.scrollEventTarget.removeEventListener('scroll', directive.scrollListener);
+      });
+      var disabledExpr = element.getAttribute('infinite-scroll-disabled');
+      var disabled = false;
+
+      if (disabledExpr) {
+        this.vm.$watch(disabledExpr, function(value) {
+          directive.disabled = value;
+          if (!value && directive.immediateCheck) {
+            doCheck.call(directive);
+          }
+        });
+        disabled = Boolean(directive.vm[disabledExpr]);
+      }
+      directive.disabled = disabled;
+      var distanceExpr = element.getAttribute('infinite-scroll-distance');
+      var distance = 0;
+      if (distanceExpr) {
+        distance = Number(directive.vm[distanceExpr] || distanceExpr);
+        if (isNaN(distance)) {
+          distance = 0;
+        }
+      }
+      directive.distance = distance;
+      var immediateCheckExpr= element.getAttribute('infinite-scroll-immediate-check');
+      var immediateCheck = true;
+      if (immediateCheckExpr) {
+        immediateCheck = Boolean(directive.vm[immediateCheckExpr]);
+      }
+      directive.immediateCheck = immediateCheck;
+
+      if (immediateCheck) {
+        doCheck.call(directive);
+      }
+
+      var eventName = element.getAttribute('infinite-scroll-listen-for-event');
+      if (eventName) {
+        directive.vm.$on(eventName, function() {
+          doCheck.call(directive);
+        });
+      }
+    }
+
+    var doCheck = function(force) {
+      var scrollEventTarget = this.scrollEventTarget;
+      var element = this.el;
+      var distance = this.distance;
+      if (force !== true && this.disabled) return;
+      var viewportScrollTop = getScrollTop(scrollEventTarget);
+      var viewportBottom = viewportScrollTop + getVisibleHeight(scrollEventTarget);
+      var shouldTrigger = false;
+      if (scrollEventTarget === element) {
+        // scrollHeight和height的不同
+        // height属性设置元素的高度，不包括填充，边框或边距; 它设置元素的填充，边框和边距内区域的高度。
+        // scrollHeight包含所有的内容和内边距
+        // offsetHeight包含所有的内容和内边距和border宽度
+        shouldTrigger = scrollEventTarget.scrollHeight - viewportBottom < distance;
+      } else { // 滚动元素内的元素，是否是滚动到元素的底部 - distance
+        var elementBottom = getElementTop(element) - getElementTop(scrollEventTarget) + element.offsetHeight + viewportScrollTop;
+        shouldTrigger = viewportBottom + distance >= elementBottom;
+      }
+      if (shouldTrigger && this.expression) {
+        this.expression();
+      }
+    }
+
+    Vue.directive('infiniteScroll', {
+      bind: function (el, binding, vnode) {
+        // var s = JSON.stringify
+        // el.innerHTML =
+        //   'name: ' + s(binding.name) + '<br>' +
+        //   'value: ' + s(binding.value) + '<br>' +
+        //   'expression: ' + s(binding.expression) + '<br>' +
+        //   'argument: ' + s(binding.arg) + '<br>' +
+        //   'modifiers: ' + s(binding.modifiers) + '<br>' +
+        //   'vnode keys: ' + Object.keys(vnode).join(', ');
+        // console.log(vnode.context);
+
+        el[ctx] = {
+          el,
+          vm: vnode.context,
+          expression: binding.value
+        };
+        var args = arguments;
+        el[ctx].vm.$on('hook:mounted', function() {
+          el[ctx].vm.$nextTick(function() {
+            // debugger;
+            if (isAttached(el)) {
+              doBind.call(el[ctx], args);
+            }
+            el[ctx].bindTryCount = 0;
+            var tryBind = function() {
+              if (el[ctx].bindTryCount > 10) return;
+              el[ctx].bindTryCount++;
+              if (isAttached(el)) {
+                doBind.call(el[ctx], args);
+              } else {
+                setTimeout(tryBind, 50);
+              }
+            }
+            tryBind();
+          });
+        })
+      },
+      unbind(el) {
+        if (el && el[ctx] && el[ctx].scrollEventTarget) {
+          el[ctx].scrollEventTarget.removeEventListener('scroll', el[ctx].scrollListener);
+        }
+      }
+    })
+
+    var app = document.querySelector('.app')
+    new Vue({
+      el: app,
+      data: function () {
+        return {busy: false}
+      },
+      methods: {
+        loadMore: function () {
+          var self = this;
+          self.busy = true;
+          console.log('loading... ' + new Date());
+          setTimeout(function () {
+            var app = document.querySelector('.app')
+            var height = app.clientHeight;
+            app.style.height = height + 300 + 'px';
+            console.log('end... ' + new Date());
+            self.busy = false
+          }, 1000)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
