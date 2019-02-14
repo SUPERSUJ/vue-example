@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			html, body {
+        margin: 0;
+        padding: 0;
+      }
+      .message-fade-enter,
+      .message-fade-leave-active {
+        opacity: 0;
+        transform: translate(-50%, -100%);
+      }
+		</style>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+    <div id="demo">
+      <button @click="openMessage">openMessage</button>
+    </div>
+    <script>
+      let seed = 0;
+      let instances = [];
+      const typeMap = {
+        success: 'success',
+        info: 'info',
+        warning: 'warning',
+        error: 'error',
+      };
+      const MessageTypes = ['success', 'warning', 'info', 'error'];
+
+      let message = {
+        template:  `
+          <transition name="message-fade">
+            <div
+              v-show="visible"
+              @mouseenter="clearTimer"
+              @mouseleave="startTimer">
+              <slot>
+                <p v-if="!dangerouslyUseHTMLString">{{message}}</p>
+                <p v-else v-html="message"></p>
+              </slot>
+              <span v-if="showClose" @click="close">X</span>
+            </div>
+          </transition>
+        `,
+        data: function() {
+          return {
+            visible: false,
+            message: '',
+            duration: 3000,
+            type: 'info',
+            onClose: null,
+            showClose: false,
+            closed: false,
+            timer: null,
+            dangerouslyUseHTMLString: false,
+            center: false,
+          };
+        },
+        watch: {
+          closed(newVal) {
+            if (newVal) {
+              this.visible = false;
+              this.$el.addEventListener('transitionend', this.destroyElement);
+            }
+          },
+        },
+        methods: {
+          destroyElement() {
+            this.$el.removeEventListener('transitionend', this.destroyElement);
+            console.log('destroyElement: ', this.$el);
+            this.$destroy(true);
+            this.$el.parentNode.removeChild(this.$el);
+          },
+          close() {
+            this.closed = true;
+            if (typeof this.onClose === 'function') {
+              this.onClose(this);
+            }
+          },
+          clearTimer() {
+            clearTimeout(this.timer);
+          },
+          startTimer() {
+            if (this.duration > 0) {
+              this.timer = setTimeout(() => {
+                if (!this.closed) {
+                  this.close();
+                }
+              }, this.duration);
+            }
+          },
+          keydown(e) {
+            if (e.keyCode === 27) {
+              if (!this.closed) {
+                this.close();
+              }
+            }
+          },
+        },
+        mounted() {
+          this.startTimer();
+          document.addEventListener('keydown', this.keydown);
+        },
+        beforeDestroy() {
+          document.removeEventListener('keydonw', this.keydown);
+        },
+      };
+
+      // Vue.component('message', message);
+
+      let MessageConstructor = Vue.extend(message);
+      const Message = function(options) {
+        options = options || {};
+        if (typeof options === 'string') {
+          options = {
+            message: options,
+          };
+        }
+        let userOnClose = options.onClose;
+        let id = `message_${seed++}`;
+        options.onClose = function() {
+          Message.close(id, userOnClose);
+        }
+        instance = new MessageConstructor({
+          data: options,
+        });
+        instance.id = id;
+        if (instance.hasOwnProperty('componentOptions')) {
+          instance.$slots.default = [options.message];
+          instance.message = '';
+        }
+        instance.vm = instance.$mount();
+        document.body.appendChild(instance.vm.$el);
+        instance.vm.visible = true;
+        instance.vm.dom = instance.vm.$el;
+        instance.vm.dom.style.zIndex = 2000;
+        instances.push(instance);
+        return instance.vm;
+      }
+
+      MessageTypes.forEach(function(type) {
+        Message[type] = function(options) {
+          return Message(options);
+        }
+      })
+
+      Message.close = function(id, userOnClose) {
+        for (let i = 0, len = instances.length; i < len; i++) {
+          if (id === instances.id) {
+            if (typeof userOnClose === 'function') {
+              userOnClose(instances[i]);
+            }
+            instances.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+      Message.closeAll = function() {
+        for (let i = 0, len = instances.length - 1; i < len; i++) {
+          instances[i].close();
+        }
+      }
+
+      Vue.prototype.$message = Message;
+
+      new Vue({
+        el: '#demo',
+        methods: {
+          openMessage() {
+            this.$message.success('SUPERSUJ');
+          },
+        },
+      });
+    </script>
+  </body>
+  </html>
