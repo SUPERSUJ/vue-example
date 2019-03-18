@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+				template: `<foo>
+          <template v-slot>hello</template>
+        </foo>`,
+				components: {
+					foo: {
+            functional: true,
+						render(h, ctx) {
+              console.log(ctx.slots().default);
+							return h('div', ctx.slots().default);
+						}
+					}
+				}
+			}).$mount('#demo')
+		</script>
+	</body>
+
+</html>

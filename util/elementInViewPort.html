@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    .demo {
+      position: relative;
+      left: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="demo">
+    demo
+    <div id="el">ss</div>
+  </div>
+  <script type="text/javascript">
+    // 元素完全显示出来
+    function isElementInViewport(el) {
+      var rect = el.getBoundingClientRect();
+      // {
+      //   bottom: 49.333335876464844 （number）
+      //   height: 20.666667938232422
+      //   left: 108
+      //   right: 1675.3333740234375
+      //   top: 28.666667938232422
+      //   width: 1567.3333740234375
+      //   x: 108
+      //   y: 28.666667938232422
+      // }
+      // window.innerWidth与window.innerHeight：获得的是可视区域的宽高，
+      // 但是window.innerWidth宽度包含了纵向滚动条的宽度，window.innerHeight高度包含了横向滚动条的高度(IE8以及低版本浏览器不支持)。
+      console.log('rect: ', rect);
+      return rect.bottom > 0
+        && rect.right > 0
+        && rect.left < (window.innerWidth || document.documentElement.clientWidth)
+        && rect.top < (window.innerHeight || document.documentElement.clientHeight)
+    }
+    var el = document.getElementById('el');
+    console.log(isElementInViewport(el));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../vue.min.js"></script>
+</head>
+
+<body>
+  <div id="demo"></div>
+  <script type="text/javascript">
+    // const foo = {
+    //   render() {
+    //     return this.$scopedSlots.default('foo', 'bar')
+    //   }
+    // }
+
+    // const vm = new Vue({
+    //   template: `<foo v-slot="foo, bar">{{ foo }} {{ bar }}</foo>`,
+    //   components: { foo }
+    // }).$mount('#demo');
+
+
+    // const vm = new Vue({
+    //   template: `
+    //     <foo>
+    //       <template #default>
+    //         <bar />
+    //       </template>
+    //     </foo>
+    //   `,
+    //   components: {
+    //     foo: {
+    //       template: `<div>foo<slot/></div>`
+    //     },
+    //     bar: resolve => {
+    //       setTimeout(() => {
+    //         resolve({
+    //           template: `<div>bar</div>`
+    //         });
+    //       }, 0)
+    //     }
+    //   }
+    // }).$mount('#demo')
+
+
+
+    // const Foo = {
+    //   data() {
+    //     return {
+    //       key: 'msg'
+    //     }
+    //   },
+    //   template: `<div><slot :[key]="'hello'"/></div>`
+    // }
+    // // 看到{ "msg": "hello" }
+    // const vm = new Vue({
+    //   components: { Foo },
+    //   template: `
+    //     <foo ref="foo" v-slot="props">{{ props }}</foo>
+    //   `
+    // }).$mount('#demo')
+
+
+    const one = {
+      template: `<div><slot name="footer"/></div>`
+    }
+
+    const two = {
+      render(h) {
+        return h(one, {
+          scopedSlots: this.$scopedSlots
+        })
+      }
+    }
+
+    const vm = new Vue({
+      data: { count: 0 },
+      render(h) {
+        return h(two, [
+          h('span', { slot: 'footer' }, this.count)
+        ])
+      }
+    }).$mount('#demo')
+  </script>
+</body>
+
+</html>
