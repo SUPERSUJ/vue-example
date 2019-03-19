@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			let vm = new Vue({
+				el: '#demo',
+        data() {
+          // 不在return内的a，不能被监听，且不会触发视图更新, a是没有get和set
+          this.a = 1;
+          return {
+            b: 1,
+          };
+        },
+        watch: {
+          a(val) {
+            console.log('a: ', val);
+          },
+          b(val) {
+            console.log('b: ', val);
+          },
+        },
+        methods: {
+          add() {
+            console.log('add');
+            this.a++;
+            this.b++;
+          },
+        },
+				template: `<div>
+          demo
+          <button @click="add">add</button>{{a}}
+        </div>`,
+			});
+      console.log('vm: ', vm);
+		</script>
+	</body>
+</html>

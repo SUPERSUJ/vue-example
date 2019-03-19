@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+    <script type="text/javascript">
+    // 使用基础 Vue 构造器，创建一个“子类”。参数是一个包含组件选项的对象。
+    // data 选项是特例，需要注意 - 在 Vue.extend() 中它必须是函数
+			const Test = Vue.extend({
+        name: 'text',
+        a: 1,
+        b: 2,
+      });
+      console.log(Test); // 扩展实例构造器
+      const t = new Test({
+        a: 3,
+      });
+      console.log(t);
+      console.log(t.$options.a);
+      // a 和 b 都不是data 返回的对象
+
+      const foo = Vue.extend({
+        template: `
+          <span>foo</span>
+        `
+      });
+      console.log(foo);
+      // Vue.component('base-component', Vue.extend(baseOptions))
+      // Vue.component('base-component',baseExtend) 
+      // Vue.component('base-component',baseOptions)
+      // Vue.component()会注册一个全局的组件，其会自动判断第二个传进来的是Vue继续对象（Vue.extend）还是普通对象({...})，如果传进来的是普能对象的话会自动调用Vue.extend，所以你先继承再传，还是直接传普通对象对Vue.component()的最终结果是没差的
+		
+      // 合并生命钩子
+      // const calls = []
+      // const A = Vue.extend({
+      //   created () {
+      //     calls.push(1)
+      //   }
+      // })
+      // const B = A.extend({
+      //   created () {
+      //     calls.push(2)
+      //   }
+      // })
+      // new B({
+      //   created () {
+      //     calls.push(3)
+      //   }
+      // })
+      // console.log(calls); // [1, 2, 3]
+
+      // 合并methods
+      // const A = Vue.extend({
+      //   methods: {
+      //     a () { return this.n }
+      //   }
+      // })
+      // const B = A.extend({
+      //   methods: {
+      //     b () { return this.n + 1 }
+      //   }
+      // })
+      // const b = new B({
+      //   data: { n: 0 },
+      //   methods: {
+      //     c () { return this.n + 2 }
+      //   }
+      // })
+      // console.log(b.a());
+      // console.log(b.b());
+      // console.log(b.c());
+
+      // 替换data中的值,但是不能通过props来设置，需要通过$props.c
+      const X = {
+        props: {
+          c: String,
+        },
+        data() {
+          return {
+            a: 1,
+            b: 2,
+          };
+        },
+        methods: {
+          add() {
+            this.a++;
+          },
+        },
+        template: `
+          <div>
+            <button @click="add">add</button>
+            <div>{{a}}{{b}}{{c}}</div>
+          </div>
+        `,
+      }
+      const XContructor = Vue.extend(X);
+      const xx = new XContructor({
+        data: {
+          a: 3,
+        },
+        // props: {
+        //   c: 'ccc',
+        // },
+      });
+      xx.$props.c = 'ccc';
+      xx.$data.a++;
+      console.log(xx);
+      console.log(xx.$el);
+      console.log(xx.$options);
+      console.log(xx.$parent);
+      console.log(xx.$root);
+      console.log(xx.$children);
+      console.log(xx.$slot);
+      xx.$mount('#demo');
+    </script>
+	</body>
+</html>
