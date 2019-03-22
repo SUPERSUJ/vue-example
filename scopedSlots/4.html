@@ -9,6 +9,7 @@
 
 	<body>
 		<div id="demo"></div>
+		<div id="demo1"></div>
 		<script type="text/javascript">
 			//			const vm = new Vue({
 			//				render(h) {
@@ -59,7 +60,10 @@
 						}
 					}
 				}
-			}).$mount('#demo')
+			}).$mount('#demo');
+			console.log('vm: ', vm);
+			console.log(vm.$el.__vue__ === vm);
+			console.log(document.getElementById('demo1')); // null 挂载点的id没有了
 		</script>
 	</body>
 
