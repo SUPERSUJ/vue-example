@@ -98,6 +98,7 @@
         `,
       }
       const XContructor = Vue.extend(X);
+      console.log(XContructor);
       const xx = new XContructor({
         data: {
           a: 3,
@@ -116,6 +117,7 @@
       console.log(xx.$children);
       console.log(xx.$slot);
       xx.$mount('#demo');
+      // extend 优先级高于mixins ,mixins 高于自身
     </script>
 	</body>
 </html>
