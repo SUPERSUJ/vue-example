@@ -4,33 +4,28 @@
 <head>
   <meta charset="utf-8">
   <title>Vue.js grid component example</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="../vue.2.0.1.js"></script>
 </head>
 
 <body>
 
-  <div id="app" class="app">
-    {{a.b}}
-    <h1>{{a.b}}</h1>
-    {{message}}
+  <div id="app">
+    <div @click="open">{{i}}</div>
   </div>
   <script src="../vue.2.0.1.js"></script>
   <script>
     var vm = new Vue({
       el: '#app',
       data() {
-        this.msg = 'szj';
         return {
-          message: 'ss',
-          a: {
-            b: 1,
-          },
+          i: 1,
         };
       },
+      methods: {
+        open() {
+          this.i++;
+        },
+      },
     });
-    console.log(vm);
-    vm.$data.a.b = 55;
   </script>
 
 </body>

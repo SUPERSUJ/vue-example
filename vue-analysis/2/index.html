@@ -10,27 +10,26 @@
 
 <body>
 
-  <div id="app" class="app">
-    {{a.b}}
-    <h1>{{a.b}}</h1>
-    {{message}}
+  <div id="app" key="super">
+    <h2 v-if="isShow">isShow</h2>
   </div>
   <script src="../vue.2.0.1.js"></script>
   <script>
     var vm = new Vue({
       el: '#app',
       data() {
-        this.msg = 'szj';
         return {
-          message: 'ss',
-          a: {
-            b: 1,
-          },
+          isShow: false,
         };
+      },
+      created() {
+        this.$on('open', () => {
+          console.log('open');
+        });
       },
     });
     console.log(vm);
-    vm.$data.a.b = 55;
+    vm.$data.isShow = true;
   </script>
 
 </body>

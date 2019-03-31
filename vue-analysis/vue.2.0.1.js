@@ -1700,9 +1700,15 @@ function lifecycleMixin (Vue) {
     if (!prevVnode) {
       // Vue.prototype.__patch__ is injected in entry points
       // based on the rendering backend used.
+      console.log('vm.$el: ', vm.$el);
+      console.log('vnode: ', vnode);
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating);
+      console.log('vm.$el: ', vm.$el);
     } else {
+      console.log('prevVnode: ', prevVnode);
+      console.log('vnode: ', vnode);
       vm.$el = vm.__patch__(prevVnode, vnode);
+      console.log('vm.$el: ', vm.$el);
     }
     activeInstance = prevActiveInstance;
     // update __vue__ reference
@@ -3744,6 +3750,7 @@ function createKeyToOldIdx (children, beginIdx, endIdx) {
 }
 
 function createPatchFunction (backend) {
+  console.log('backend: ', backend, JSON.stringify(backend));
   var i, j;
   var cbs = {};
 
@@ -7300,6 +7307,7 @@ function compileToFunctions (
   }
   var res = {};
   var compiled = compile$$1(template, options);
+  console.log('compiled: ', compiled);
   res.render = makeFunction(compiled.render);
   var l = compiled.staticRenderFns.length;
   res.staticRenderFns = new Array(l);
