@@ -9,22 +9,22 @@
 <body>
 
   <div id="app">
-    <div @click="open">{{i}}</div>
+    <ab v-for="a in 10" v-key="a">
+      {{a}}
+    </ab>
   </div>
   <script src="../vue.2.0.1.js"></script>
   <script>
-    var vm = new Vue({
+    Vue.component('ab', {
+      functional: true,
+			render(h, ctx) {
+        console.log(ctx);
+				return h('p', null, ['ab', ...(ctx.slots().default || [])]);
+			}
+    });
+
+    new Vue({
       el: '#app',
-      data() {
-        return {
-          i: 1,
-        };
-      },
-      methods: {
-        open() {
-          this.i++;
-        },
-      },
     });
   </script>
 

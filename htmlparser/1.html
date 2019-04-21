@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+
+<body>
+  <div>
+    <p>hello</p>
+    <p>world</p>
+  </div>
+  <script src="../htmlparser.js"></script>
+  <script>
+    var results = "";
+    console.log(HTMLParser("<p id=test>hello <i>world</i></p>", {
+      start: function (tag, attrs, unary) {
+        console.log('start: ', tag, attrs, unary);
+        results += "<" + tag;
+
+        for (var i = 0; i < attrs.length; i++)
+          results += " " + attrs[i].name + '="' + attrs[i].escaped + '"';
+
+        results += ">";
+      },
+      end: function (tag) {
+        console.log('end: ', tag);
+        results += "</" + tag + ">";
+      },
+      chars: function (text) {
+        console.log('chars: ', text);
+        results += text;
+      },
+      comment: function (text) {
+        console.log('comment: ', text);
+        results += "<!--" + text + "-->";
+      }
+    }));
+    console.log(results);
+  </script>
+</body>
+
+</html>
