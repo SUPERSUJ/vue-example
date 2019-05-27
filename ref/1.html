@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const components = {
+				test1: {
+					id: 'test1',
+					template: `<div>test1</div>`,
+				},
+				test2: {
+					id: 'test2',
+					template: `<div>test2</div>`,
+				},
+				test3: {
+					id: 'test3',
+					template: `<div>test3</div>`,
+				},
+			};
+			
+			const vm = new Vue({
+				el: '#demo',
+        data() {
+          return {
+            list: [1, 2, 3],
+          };
+        },
+				components,
+				render(h) {
+					return h('div', null, [
+            ...this.list.map(() => {
+              return h('test1', {
+                ref: 'test'
+              });
+            }),
+						// h('test1', {
+						// 	ref: 'test',
+						// }),
+            // h('test1', {
+						// 	ref: 'test',
+						// }),
+            // h('test1', {
+						// 	ref: 'test',
+						// }),
+					]);
+				},
+        // template: `
+        //   <div>
+        //     <test1 v-for="item in list" :key="item" ref="test"></test1>
+        //   </div>
+        // `
+        // template: `
+        //   <div>
+        //     <div v-for="item of list">
+        //       <test1 ref="test"></test1>
+        //     </div>
+        //   </div>
+        // `
+			});
+      vm.$mount('#demo');
+			console.log(vm.$refs.test);
+      // 无论是v-for组件， 还是v-for下面的组件，相同的ref是数组,render下的全部是对象
+		</script>
+	</body>
+</html>
