@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const components = {
+				test1: {
+					id: 'test1',
+					template: `<div>test1</div>`,
+				},
+				test2: {
+					id: 'test2',
+					template: `<div>test2</div>`,
+				},
+				test3: {
+					id: 'test3',
+					template: `<div>test3</div>`,
+				},
+			};
+			
+			const vm = new Vue({
+				el: '#demo',
+				components,
+				render(h) {
+					return h('div', null, [
+						Object.keys(components).map((key) => {
+              return h(key, {
+                ref: key,
+              });
+            })
+					]);
+				},
+			});
+			console.log(vm.$refs.test1.$options.id);
+			console.log(vm.$refs.test2.$options.id);
+			console.log(vm.$refs.test3.$options.id);
+		</script>
+	</body>
+</html>
