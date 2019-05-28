@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+  </head>
+  <body>
+    <!-- v-pre 跳过编译 -->
+    <div id="demo"></div>
+    <script>
+      const vm = new Vue({
+        template: `<div>
+          <div v-pre>{{ a }}</div>
+          <div>{{ a }}</div>
+          <div v-pre>
+            <component is="div"></component>
+          </div>
+        </div>`,
+        data: {
+          a: 123
+        }
+      })
+      vm.$mount('#demo')
+    </script>
+  </body>
+</html>

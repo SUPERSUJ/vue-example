@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+    <style type="text/css">
+    /* template 未编译完，显示的样式 */
+      [v-cloak] {
+        /* display: none !important; */
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <span v-cloak>{{ msg }}</span>
+    </div>
+    <script>
+      setTimeout(() => {
+        new Vue({
+          el: '#app',
+          data: {
+            msg: 'hello vue'
+          }
+        })
+      }, 2000)
+    </script>
+  </body>
+</html>

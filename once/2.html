@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+        template: `
+          <div>
+            <div v-once>
+              <span>{{a}}</span>
+              <item :a="a"></item>
+            </div>
+            <button @click="changeA">changeA</button>
+          </div>
+        `,
+        data() {
+          return {
+            a: 'hello',
+          };
+        },
+        methods: {
+          changeA() {
+            this.a += ' world';
+          },
+        },
+        components: {
+          item: {
+            props: ['a'],
+            template: `
+              <em>{{a}}</em>
+            `,
+          },
+        },
+      }).$mount('#demo');
+      // v-once 下的元素或者组件，不变
+		</script>
+	</body>
+</html>

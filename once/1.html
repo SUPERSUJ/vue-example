@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+        data: {
+          tester: true,
+          yes: 'y',
+          no: 'n'
+        },
+        template: `
+          <div>
+            <div v-if="tester">{{ yes }}</div>
+            <div v-else>{{ no }}</div>
+            <div v-if="tester" v-once>{{ yes }}</div>
+            <div v-else>{{ no }}</div>
+            <div v-if="tester">{{ yes }}</div>
+            <div v-else v-once>{{ no }}</div>
+            <div v-if="tester" v-once>{{ yes }}</div>
+            <div v-else v-once>{{ no }}</div>
+            <button @click="changeTester">changeTester</button>
+            <input v-model="yes" placeholder="yes"></input>
+            <input v-model="no" placeholder="no"></input>
+          </div>
+        `,
+        methods: {
+          changeTester() {
+            this.tester = !this.tester;
+          },
+        },
+      }).$mount('#demo');
+      // v-if 为true后,v-once下的不变
+		</script>
+	</body>
+</html>

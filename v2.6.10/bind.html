@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+	</head>
+
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const vm = new Vue({
+        data() {
+          return {
+            key: 'a',
+            a: 'a',
+            // a是this下属性
+          };
+        },
+        template: `
+          <div>
+            <item v-bind:[key]="a"></item>
+            <button @click="changeKey">changeKey</button>
+          </div>
+        `,
+        methods: {
+          changeKey() {
+            this.key += '1';
+            if (this.key === 'a1111') {
+              this.key = null;
+            }
+          },
+        },
+        components: {
+          item: {
+            template: `
+              <span>{{$attrs}}</span>
+            `,
+          },
+        },
+			}).$mount('#demo');
+		</script>
+	</body>
+
+</html>
