@@ -39,6 +39,19 @@
 			console.log(vm.$refs.test1.$options.id);
 			console.log(vm.$refs.test2.$options.id);
 			console.log(vm.$refs.test3.$options.id);
+			// const vm = new Vue({
+      //   data: {
+      //     items: [1, 2, 3]
+      //   },
+      //   template: `
+      //     <div>
+      //       <div v-for="n in items" ref="list">{{n}}</div>
+      //     </div>
+      //   `
+      // });
+      // vm.$mount('#demo');
+			// console.log(vm.$refs.list);
+      // // 无论是v-for组件， 还是v-for下面的组件，相同的ref是数组,render下的全部是对象
 		</script>
 	</body>
 </html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		<script type="text/javascript">
+			const components = {
+				test1: {
+					id: 'test1',
+					template: `<div>test1</div>`,
+				},
+				test2: {
+					id: 'test2',
+					template: `<div>test2</div>`,
+				},
+				test3: {
+					id: 'test3',
+					template: `<div>test3</div>`,
+				},
+			};
+			
+			const vm = new Vue({
+				el: '#demo',
+        data() {
+          return {
+            value: 'test1',
+            i: 1,
+          };
+        },
+        template: `
+          <div>
+            <div :ref="value">{{value}}</div>
+            <button @click="changeValue">changeValue</button>
+          </div>
+        `,
+        methods: {
+          changeValue() {
+            this.i++;
+            if (this.i >= 4) {
+              this.i = 1;
+            }
+            this.value = `test${this.i}`;
+            this.$nextTick(() => {
+              console.log(this.$refs[this.value]); // DOM元素
+            });
+          },
+        },
+				components,
+			});
+      vm.$mount('#demo');
+		</script>
+	</body>
+</html>
