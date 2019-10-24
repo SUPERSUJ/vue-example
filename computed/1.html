@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.5.17/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="editor">
+      <input type="text" v-model="text">
+      <!-- 当this.text 变化的时候，下面的getName会重新计算两次，而用computed 不会，只计算两次 -->
+      <div>getName 1: {{getName()}}</div>
+      <div>getName 2: {{getName()}}</div>
+      <div>a1: {{a}}</div>
+      <div>a2: {{a}}</div>
+      <!-- computed 没有get和set，赋值是没有效果的 -->
+      <button @click="a + 1">a + 1</button>
+		</div>
+		<script type="text/javascript">
+			new Vue({
+			  el: '#editor',
+			  data: {
+			    text: '1',
+			  },
+			  computed: {
+          a() {
+            console.log('computed a');
+            return this.text + 1;
+          },
+        },
+        watch: {
+          // 当text 发生变化，先执行它的watch，再执行computed或者方法，谁最先渲染，谁先执行
+          text(val) {
+            console.log('text: ', val);
+            console.log('监听text');
+          },
+        },
+        methods: {
+          getName() {
+            console.log('getName');
+            return this.text;
+          },
+        },
+			});
+		</script>
+	</body>
+</html>
