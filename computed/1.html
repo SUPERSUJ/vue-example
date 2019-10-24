@@ -8,7 +8,7 @@
 	<body>
 		<div id="editor">
       <input type="text" v-model="text">
-      <!-- 当this.text 变化的时候，下面的getName会重新计算两次，而用computed 不会，只计算两次 -->
+      <!-- 当this.text 变化的时候，下面的getName会重新计算两次，而用computed 不会，只计算一次 -->
       <div>getName 1: {{getName()}}</div>
       <div>getName 2: {{getName()}}</div>
       <div>a1: {{a}}</div>
